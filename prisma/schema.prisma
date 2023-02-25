@@ -1,0 +1,60 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Student {
+  id                   String                 @id
+  name                 String
+  email                String                 @unique
+  age                  Int
+  Class                Class[]
+  StudentAssignedClass StudentAssignedClass[]
+}
+
+// Define the data model for the teacher table.
+model Teacher {
+  id                   String                 @id
+  name                 String
+  email                String                 @unique
+  age                  Int
+  Class                Class[]
+  TeacherAssignedClass TeacherAssignedClass[]
+}
+
+// Define the data model for the class table.
+model Class {
+  id                   String                 @id
+  name                 String
+  classRep             Student?               @relation(fields: [studentId], references: [id])
+  mentor               Teacher?               @relation(fields: [mentorId], references: [id])
+  mentorId             String?                @unique
+  studentId            String?
+  StudentAssignedClass StudentAssignedClass[]
+  TeacherAssignedClass TeacherAssignedClass[]
+}
+
+model StudentAssignedClass {
+  id        Int      @id @default(autoincrement())
+  studentId String?
+  student   Student? @relation(fields: [studentId], references: [id])
+
+  classId String?
+  class   Class?  @relation(fields: [classId], references: [id])
+}
+
+model TeacherAssignedClass {
+  id        Int      @id @default(autoincrement())
+  teacherId String?
+  teacher   Teacher? @relation(fields: [teacherId], references: [id])
+
+  classId String?
+  class   Class?  @relation(fields: [classId], references: [id])
+}

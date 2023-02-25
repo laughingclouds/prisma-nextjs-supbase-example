@@ -45,7 +45,7 @@ export default function Home({ data }) {
         <div>
           <p className="whitespace-normal">Made with ❤, for
             &nbsp;<a className="link link-primary" target="_blank" href="https://codeforgeek.com/">codeforgeek.com</a>
-          </p>
+            &nbsp;| <a className="link link-hover link-secondary" href="https://github.com/laughingclouds/prisma-nextjs-supbase-example" target="_blank">Source Code</a></p>
         </div>
       </footer>
     </>

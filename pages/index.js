@@ -55,7 +55,7 @@ export default function Home({ data }) {
 
 export async function getServerSideProps() {
   const students = await prisma.student.findMany();
-  const teachers = await prisma.teacherAssignedClass.findMany();
+  const teachers = await prisma.teacher.findMany();
   const classes = await prisma.class.findMany();
   const studentAssignedClasses = await prisma.studentAssignedClass.findMany();
 
@@ -117,6 +117,8 @@ export async function getServerSideProps() {
       students: classStudents
     });
   }
+
+  data[0].mentor.teacherId
 
   return { props: { data } };
 }

@@ -60,7 +60,35 @@ export async function getServerSideProps() {
   const studentAssignedClasses = await prisma.studentAssignedClass.findMany();
 
   prisma.$disconnect();
-  /*
+  
+  let data = [];
+
+  for (let classInfo of classes) {
+    const teacher = teachers.find(teacher => teacher.id == classInfo.mentorId);
+    const classRep = students.find(student => student.id == classInfo.id);
+
+    const assignedStudents = studentAssignedClasses.filter(stud => stud.classId == classInfo.id);
+
+    const classStudents = students.filter(student => {
+      return Boolean(assignedStudents.find(assignedStud => assignedStud.studentId == student.id));
+    });
+
+    data.push({
+      id: classInfo.id,
+      name: classInfo.name,
+      mentor: teacher,
+      classRep: classRep,
+      students: classStudents
+    });
+  }
+
+  data[0].mentor.teacherId
+
+  return { props: { data } };
+}
+
+/*
+  // example data
   const students = [
     { id: '1', name: 'Hemant', email: 'ex1@example.com', age: 20 },
     { id: '2', name: 'John', email: 'ex2@example.com', age: 21 },
@@ -97,28 +125,3 @@ export async function getServerSideProps() {
     { id: 3, teacherId: '2', classId: '2' }
   ];
   */
-  let data = [];
-
-  for (let classInfo of classes) {
-    const teacher = teachers.find(teacher => teacher.id == classInfo.mentorId);
-    const classRep = students.find(student => student.id == classInfo.id);
-
-    const assignedStudents = studentAssignedClasses.filter(stud => stud.classId == classInfo.id);
-
-    const classStudents = students.filter(student => {
-      return Boolean(assignedStudents.find(assignedStud => assignedStud.studentId == student.id));
-    });
-
-    data.push({
-      id: classInfo.id,
-      name: classInfo.name,
-      mentor: teacher,
-      classRep: classRep,
-      students: classStudents
-    });
-  }
-
-  data[0].mentor.teacherId
-
-  return { props: { data } };
-}
